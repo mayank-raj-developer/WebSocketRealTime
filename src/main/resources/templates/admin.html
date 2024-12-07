@@ -11,6 +11,8 @@
 <div id="notifications"></div>
 <input type="text" id="message" placeholder="Enter your message">
 <button onclick="sendMessage()">Send</button>
+<input type="text" id="score" placeholder="Enter your Score">
+<button onclick="sendScore()">SendScore</button>
 
 <script>
     let stompClient = null;
@@ -24,9 +26,13 @@
         stompClient.subscribe('/topic/notifications', function (message) {
             showNotification(message.body);  // Handle incoming messages
         });
+        stompClient.subscribe('/topic/scores', function (score) {
+            showNotification(score.body);  // Handle incoming messages
+        });
     }, function (error) {
         console.error('WebSocket connection error: ' + error);  // Log WebSocket errors
     });
+
 }
 
 
@@ -38,14 +44,23 @@
     } else {
         console.error('WebSocket connection is not established.');
     }
+    }
+  function sendScore() {
+    const score = document.getElementById('score').value;
+    if (stompClient && stompClient.connected) {
+        stompClient.send('/app/sendScore', {}, score);
+        console.log('Score sent:', score);
+    } else {
+        console.error('WebSocket connection is not established.');
+  }
 }
+    function showNotification(message) {
+        const notifications = document.getElementById('notifications');
+        const notification = document.createElement('p');
+        notification.textContent = message;
+        notifications.appendChild(notification);
+    }
 
-<!--    function showNotification(message) {-->
-<!--        const notifications = document.getElementById('notifications');-->
-<!--        const notification = document.createElement('p');-->
-<!--        notification.textContent = message;-->
-<!--        notifications.appendChild(notification);-->
-<!--    }-->
 
     connect();
 </script>

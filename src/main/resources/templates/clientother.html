@@ -20,7 +20,7 @@
 
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);  // Log the successful connection
-        stompClient.subscribe('/topic/notifications', function (message) {
+        stompClient.subscribe('/topic/scores', function (message) {
             showNotification(message.body);  // Handle incoming messages
         });
     }, function (error) {

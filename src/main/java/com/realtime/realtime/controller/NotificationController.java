@@ -14,4 +14,11 @@ public class NotificationController {
         System.out.print("Message : " +message);
         return message;
     }
+    @MessageMapping("/sendScore")
+    @SendTo("/topic/scores")
+    public String sendScore(String score)
+    {
+        System.out.print("Score : " +score);
+        return score;
+    }
 }
